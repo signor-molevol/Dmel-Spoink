@@ -1,0 +1,15 @@
+find /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/RM-out/bed -name '*.tsv' -type f -exec sh -c 'python /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/insertions2bed.py $0 5000 5600 29 ${0%.tsv}.bed' {} \;
+
+
+for bed_file in /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/RM-out/bed/*.bed; do
+    base_name=$(basename "$bed_file" .bed)
+    fasta_file="/Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/genomes/$base_name.fa"   
+    output_fasta="/Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/RM-out/fasta/$base_name.fasta"
+    bedtools getfasta -s -fi "$fasta_file" -bed "$bed_file" -fo "$output_fasta"
+done
+
+cat /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/RM-out/fasta/*.fasta > /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/MSA/spoink-Dmel.fasta
+
+muscle -in /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/MSA/spoink-Dmel.fasta -out /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/MSA/spoink.MSA
+
+python /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/MSA2consensus.py /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/MSA/spoink.MSA /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/MSA/spoink-consensus-dmel.fasta
