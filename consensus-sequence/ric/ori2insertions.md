@@ -41,9 +41,8 @@ arranged differently for insertions in the two strands:
 - For `+` strand: `begin`, `end`, `left`
 - For `C` strand: `left`, `end`, `begin`
 
-For simplicity, we kept the order of the `+` strand for all the RM hits
-and we dealt with this difference in the next analysis calculating
-`fragment length` and `segment length` differently for the two strands.
+I switched the order of the `C` strand for all the RM hits and we dealt
+with this difference in the next analysis to keep it consistent.
 
 Command to remove multiple spaces from the RM output and make it
 readable in R:
@@ -69,9 +68,17 @@ library(tidyverse)
 library(ggpubr)
 ```
 
+List of strains used for the consensus sequence generation (long-reads).
+
 ``` r
 strains <- c("Es_Ten","Iso1","Pi2","RAL91","RAL176","RAL732","RAL737","SE_Sto")
+```
 
+Function to use to clean the RM output from parenthesis, invert position
+in repeat in C strand and add a column with the strain name. Then it
+selects only the `gypsy-7-sim1` insertions (spoink).
+
+``` r
 read_RM_out <- function(path, strain_name) {
   
   out <- read_delim(path, delim = " ", col_names = c("SWscore", "perc_div", "perc_del", "perc_ins", "query_sequence", "position_in_query_begin", "position_in_query_end", "position_in_query_left",  "strand", "matching_repeat", "repeat_class/family", "position_in_repeat_begin", "position_in_repeat_end", "position_in_repeat_left")) %>% select(-X15) %>% mutate(position_in_repeat_begin = str_replace(position_in_repeat_begin, "\\(", "")) %>% mutate(position_in_repeat_begin = str_replace(position_in_repeat_begin, "\\)", "")) %>% mutate(position_in_repeat_left = str_replace(position_in_repeat_left, "\\(", "")) %>% mutate(position_in_repeat_left = str_replace(position_in_repeat_left, "\\)", "")) %>% mutate(position_in_query_left = str_replace(position_in_query_left, "\\(", "")) %>% mutate(position_in_query_left = str_replace(position_in_query_left, "\\)", "")) %>% mutate(position_in_repeat_end = str_replace(position_in_repeat_end, "\\(", "")) %>% mutate(position_in_repeat_end = str_replace(position_in_repeat_end, "\\)", "")) %>% mutate(position_in_query_begin = str_replace(position_in_query_begin, "\\(", "")) %>% mutate(position_in_query_begin = str_replace(position_in_query_begin, "\\)", "")) %>% mutate(position_in_query_end = str_replace(position_in_query_end, "\\(", "")) %>% mutate(position_in_query_end = str_replace(position_in_query_end, "\\)", "")) %>% type_convert()
@@ -80,7 +87,12 @@ read_RM_out <- function(path, strain_name) {
   
   out_spoink <- out_inverted %>% filter(matching_repeat == "gypsy-7-sim1")
 }
+```
 
+Apply the function to all the RM output (after removing multiple spaces
+with the command above). Then, merge the files in a single tibble.
+
+``` r
 Es_Ten <- read_RM_out("/Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/RM-out/readable/D.mel.Es_Ten.fa.ori.out", "Es_Ten")
 ```
 
@@ -308,6 +320,11 @@ SE_Sto <- read_RM_out("/Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus
 RM_merged <- bind_rows(Es_Ten, RAL91, RAL176, RAL732, RAL737, SE_Sto) %>% select(-"matching_repeat", -"repeat_class/family")
 ```
 
+This code is cleaning the RM tibble from hits with divergence \> 20%
+(following the 80-80-80 rule), selecting high quality hits (SWscore \>
+10.000) and the neighboring fragments, then is writing a new tsv file
+for each strain with the selected hits.
+
 ``` r
 identify_fragments <- RM_merged %>% mutate(length = position_in_query_end-position_in_query_begin,
     distance_from_previous = position_in_query_begin - lag(position_in_query_end, default = first(position_in_query_end)),
@@ -345,7 +362,7 @@ fragments_near_HQ <- identify_fragments %>% filter(HQ_hits == "HQ" | (lead(HQ_hi
     ## #   insertion_number <dbl>
 
 ``` r
-insertions_selected <- insertions %>% select(query_sequence, position_in_query_begin, position_in_query_end, strand, position_in_repeat_begin, position_in_repeat_end, strain, distance_from_previous, distance_from_next)
+insertions_selected <- insertions %>% select(query_sequence, position_in_query_begin, position_in_query_end, strand, position_in_repeat_begin, position_in_repeat_end, strain)
 
 strains <- c("Es_Ten","RAL176","RAL732","RAL737","RAL91","SE_Sto")
 for (s in strains){
@@ -355,8 +372,24 @@ for (s in strains){
 }
 ```
 
+Use the python script `insertions2bed.py` on the generated `tsv` files
+to ged the defragmented bed files. Arguments of the script:
+
+- input file
+- minimum length for an insertion to be included
+- maximum length for an insertion to be included
+- positions to add at the end of the sequence (if the RM is missing some
+  part, usually just use 0)
+- output file
+
+<!-- -->
+
     find /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/RM-out/bed -name '*.tsv' -type f -exec sh -c 'python /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/insertions2bed.py $0 5000 5600 29 ${0%.tsv}.bed' {} \;
 
+For each bed file, extract the fasta sequence using `bedtools getfasta`
+with the `-s` option to get the reverse complement of the insertions on
+the **-** strand (the strand info is included in the bed file in the 6th
+column).
 
     for bed_file in /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/RM-out/bed/*.bed; do
         base_name=$(basename "$bed_file" .bed)
@@ -365,8 +398,20 @@ for (s in strains){
         bedtools getfasta -s -fi "$fasta_file" -bed "$bed_file" -fo "$output_fasta"
     done
 
+Concatenate the fasta files together.
+
     cat /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/RM-out/fasta/*.fasta > /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/MSA/spoink-Dmel.fasta
 
+Perform multiple sequence alignment using MUSCLE.
+
     muscle -in /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/MSA/spoink-Dmel.fasta -out /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/MSA/spoink.MSA
+
+Use the python script `MSA2consensus.py` to extract the consensus
+sequence from the MSA. The script is calculating the base counts for
+each position in the sequence and write the most common in the
+consensus. If “-” is the most common hit (meaning that some sequences
+are missing that base), the script is checking if there are more
+sequences with a base or without, and then assigning either the most
+common base (first case) or not writing anything (second case).
 
     python /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/MSA2consensus.py /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/MSA/spoink.MSA /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/MSA/spoink-consensus-dmel.fasta
