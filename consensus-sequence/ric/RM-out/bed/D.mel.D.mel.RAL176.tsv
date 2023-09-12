@@ -1,0 +1,5 @@
+query_sequence	position_in_query_begin	position_in_query_end	strain	column5	strand
+CM034788.1	7001178	7001526	D.mel.RAL176	0	+
+CM034788.1	7006121	7006469	D.mel.RAL176	0	+
+CM034788.1	14938586	14938934	D.mel.RAL176	0	-
+CM034788.1	14943424	14943772	D.mel.RAL176	0	-
