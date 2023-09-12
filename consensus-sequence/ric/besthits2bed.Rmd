@@ -1,0 +1,85 @@
+---
+title: "RM LTR best hits to bed file"
+output: rmarkdown::github_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(root.dir = '/Users/rpianezza/TE')
+```
+
+```
+less path/rm.out | sed 's/  */ /g' | cut -c2- | > output
+```
+
+```{r}
+library(tidyverse)
+library(ggpubr)
+```
+
+List of strains used for the consensus sequence generation (long-reads).
+```{r}
+strains <- c("Es_Ten","RAL91","RAL176","RAL732","RAL737","SE_Sto")
+```
+
+```{r}
+read_besthits_out <- function(path, s) {
+  
+out <- read_delim(path, delim = " ", col_names = c("SWscore", "perc_div", "perc_del", "perc_ins", "query_sequence", "position_in_query_begin", "position_in_query_end", "position_in_query_left",  "strand", "matching_repeat", "repeat_class/family", "position_in_repeat_begin", "position_in_repeat_end", "position_in_repeat_left", "strain")) %>% select(SWscore, query_sequence, position_in_query_begin, position_in_query_end, strain, strand) %>% type_convert()
+
+(with_strain <- out %>% mutate(strain = s) %>% filter(SWscore>3000) %>% select(-SWscore))
+}
+```
+
+
+
+```{r}
+best_insertions <- function(data){
+  ltr <- data %>% mutate(distance_from_previous = position_in_query_begin - lag(position_in_query_end, default = first(position_in_query_end)),
+    distance_from_next = lead(position_in_query_begin, default = last(position_in_query_begin)) - position_in_query_end) %>% filter((distance_from_next > 4500 & distance_from_next < 4700) | (distance_from_previous > 4500 & distance_from_previous < 4700)) 
+  
+  insertions <- ltr %>% mutate(position_in_query_end = lead(position_in_query_end)) %>% filter(distance_from_next > 4500 & distance_from_next < 4700) %>% select(-distance_from_previous, -distance_from_next)
+
+column_order <- c("query_sequence", "position_in_query_begin", "position_in_query_end", "strain", "column5", "strand")
+(bed <- insertions %>% mutate(strand = ifelse(strand=="C", "-", strand), column5 = "0") %>% select(all_of(column_order)))
+}
+```
+
+```{r}
+path_to_folder <- "/Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/LTR-hits/D.mel."
+
+for (s in strains){
+  
+  (data_strain <- read_besthits_out(paste0(path_to_folder, s, ".fa.ori.out.readable"), s) %>% best_insertions())
+  write_tsv(data_strain, paste0(path_to_folder, s, ".bed"), col_names = FALSE)
+  print(data_strain)
+}
+```
+
+For each bed file, extract the fasta sequence using `bedtools getfasta` with the `-s` option to get the reverse complement of the insertions on the **-** strand (the strand info is included in the bed file in the 6th column).
+```{}
+for bed_file in /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/RM-out/bed/*.bed; do
+    base_name=$(basename "$bed_file" .bed)
+    fasta_file="/Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/genomes/$base_name.fa"   
+    output_fasta="/Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/RM-out/fasta/$base_name.fasta"
+    bedtools getfasta -s -fi "$fasta_file" -bed "$bed_file" -fo "$output_fasta"
+done
+```
+
+Concatenate the fasta files together.
+```{}
+cat /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/RM-out/fasta/*.fasta > /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/MSA/spoink-Dmel.fasta
+```
+
+Perform multiple sequence alignment using MUSCLE.
+```{}
+muscle -in /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/MSA/spoink-Dmel.fasta -out /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/MSA/spoink.MSA
+```
+
+Use the python script `MSA2consensus.py` to extract the consensus sequence from the MSA. The script is calculating the base counts for each position in the sequence and write the most common in the consensus. If "-" is the most common hit (meaning that some sequences are missing that base), the script is checking if there are more sequences with a base or without, and then assigning either the most common base (first case) or not writing anything (second case).
+```{}
+python /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/MSA2consensus.py /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/MSA/spoink.MSA /Volumes/Temp1/simulans-old-strains/Dmel-spoink/consensus/MSA/spoink-consensus-dmel.fasta
+```
