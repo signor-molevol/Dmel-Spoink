@@ -143,7 +143,9 @@ fasta-reader.py GCA_020141515.1_ASM2014151v1_genomic.fna | fasta-formatter.py --
 cat fileinfo|python renamer.py|zsh
 ```
 
-\*\* RepeatMask Almos LTR \*\*
+# RepeatMask
+
+## Almos LTR
 
 ``` bash
 for i in raw-dmel/D.mel.*.fa; do RepeatMasker -pa 20 -no_is -s -nolow -dir rm/Ltr-v2  -lib seqs/LTR_Almo-v2.fasta $i;done
