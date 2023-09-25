@@ -1,20 +1,15 @@
----
-title: "Gonzalez - analysis (MCTE)"
-author: "roko"
-date: "9/8/2023"
-output: github_document
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, python.reticulate = FALSE)
-```
-
+Gonzalez - analysis (MCTE)
+================
+roko
+9/8/2023
 
 # Prepare
 
-# RepeatMask 
+# RepeatMask
+
 ## Sequence check
-```{bash eval=FALSE}
+
+``` bash
 ll seq
 -rw-r--r--  1 fschwarz  staff   362 Sep 13 09:51 spoink-dmel-LTR_v1.fasta
 -rw-r--r--  1 fschwarz  staff  5225 Sep 13 09:51 spoink-dmel-consensus_v1.fasta
@@ -27,18 +22,21 @@ ll seq
 ```
 
 ## Starting with Droso assemblies
-```{bash eval=FALSE}
+
+``` bash
 or i in raw-dmel/D.mel.*.fa; do RepeatMasker -pa 20 -no_is -s -nolow -dir rm/MCTE -lib seqs/MCTE.fasta $i;done
 (base) [0,11707]fschwarz% for i in assemblies-Droso/C.costata.fa assemblies-Droso/D.aff.chauv..fa assemblies-Droso/D.ambigua.fa assemblies-Droso/D.americana.fa assemblies-Droso/D.ananassae.fa assemblies-Droso/D.arawakana.fa assemblies-Droso/D.biarmipes.fa assemblies-Droso/D.bipectinata.fa assemblies-Droso/D.bocqueti.fa assemblies-Droso/D.cardini.fa assemblies-Droso/D.carrolli.fa assemblies-Droso/D.dunni.fa assemblies-Droso/D.elegans.fa assemblies-Droso/D.equinoxialis.fa assemblies-Droso/D.ercepeae.fa assemblies-Droso/D.erecta.fa assemblies-Droso/D.eugracilis.fa assemblies-Droso/D.ficusphila.fa assemblies-Droso/D.funebris.fa assemblies-Droso/D.fuyamai.fa assemblies-Droso/D.grimshawi.fa assemblies-Droso/D.immigrans.12.fa assemblies-Droso/D.immigrans.k17.fa assemblies-Droso/D.insularis.fa assemblies-Droso/D.jambulina.fa assemblies-Droso/D.kikkawai.fa assemblies-Droso/D.kurseongensis.fa assemblies-Droso/D.littoralis.fa assemblies-Droso/D.mal.mal..fa assemblies-Droso/D.mal.pallens.fa assemblies-Droso/D.mau.01.fa assemblies-Droso/D.mau.R31.fa assemblies-Droso/D.mau.R32.fa assemblies-Droso/D.mau.R39.fa assemblies-Droso/D.mau.R61.fa assemblies-Droso/D.mel.Es_Ten.fa assemblies-Droso/D.mel.Iso1.fa assemblies-Droso/D.mel.Pi2.fa assemblies-Droso/D.mel.RAL176.fa assemblies-Droso/D.mel.RAL732.fa assemblies-Droso/D.mel.RAL737.fa assemblies-Droso/D.mel.RAL91.fa assemblies-Droso/D.mel.SE_Sto.fa assemblies-Droso/D.mojavensis.fa assemblies-Droso/D.murphyi.fa assemblies-Droso/D.neocordata.fa assemblies-Droso/D.obscura.fa assemblies-Droso/D.oshimai.fa assemblies-Droso/D.parabipectinata.fa assemblies-Droso/D.paulistorum.06.fa assemblies-Droso/D.paulistorum.12.fa assemblies-Droso/D.persimilis.fa assemblies-Droso/D.prosaltans.fa assemblies-Droso/D.pruinosa.fa assemblies-Droso/D.pseuan.nigrens.fa assemblies-Droso/D.pseuan.pseuan..fa assemblies-Droso/D.pseudoobscura.fa assemblies-Droso/D.quadrilineata.fa assemblies-Droso/D.repleta.fa assemblies-Droso/D.repletoides.fa assemblies-Droso/D.rhopaloa.fa assemblies-Droso/D.rufa.fa assemblies-Droso/D.saltans.fa assemblies-Droso/D.sechellia.fa assemblies-Droso/D.sim.006.fa assemblies-Droso/D.sim.SZ129.fa assemblies-Droso/D.sim.SZ232.fa assemblies-Droso/D.sp.14030-0761.01.fa assemblies-Droso/D.sp.st01m.fa assemblies-Droso/D.sproati.fa assemblies-Droso/D.sturtevanti.fa assemblies-Droso/D.subobscura.fa assemblies-Droso/D.subpulchrella.fa assemblies-Droso/D.sucinea.fa assemblies-Droso/D.takahashii.fa assemblies-Droso/D.teissieri.273.3.fa assemblies-Droso/D.teissieri.ct02.fa assemblies-Droso/D.triauraria.fa assemblies-Droso/D.tristis.fa assemblies-Droso/D.tropicalis.fa assemblies-Droso/D.varians.fa assemblies-Droso/D.virilis.fa assemblies-Droso/D.willistoni.00.fa assemblies-Droso/D.willistoni.17.fa assemblies-Droso/D.yakuba.fa assemblies-Droso/L.clarofinis.fa assemblies-Droso/L.collinella.fa assemblies-Droso/L.magnipectinata.fa assemblies-Droso/L.mommai.fa assemblies-Droso/L.stackelbergi.fa assemblies-Droso/L.varia.fa assemblies-Droso/S.graminum.fa assemblies-Droso/S.hsui.fa assemblies-Droso/S.montana.fa assemblies-Droso/S.pallida.fa assemblies-Droso/Z.africanus.fa assemblies-Droso/Z.camerounensis.fa assemblies-Droso/Z.capensis.fa assemblies-Droso/Z.davidi.fa assemblies-Droso/Z.gabonicus.fa assemblies-Droso/Z.ghesquierei.fa assemblies-Droso/Z.indianus.BS02.fa assemblies-Droso/Z.indianus.D18.fa assemblies-Droso/Z.indianus.R04.fa assemblies-Droso/Z.indianus.V01.fa assemblies-Droso/Z.inermis.fa assemblies-Droso/Z.kolodkinae.fa assemblies-Droso/Z.lachaisei.fa assemblies-Droso/Z.nigranus.fa assemblies-Droso/Z.ornatus.fa assemblies-Droso/Z.taronus.fa assemblies-Droso/Z.tsacasi.car7.fa assemblies-Droso/Z.tsacasi.jd01t.fa assemblies-Droso/Z.vittiger.fa; do RepeatMasker -pa 20 -no_is -s -nolow -dir rm/Droso -lib seq/spoink-dmel-consensus_v1.fasta $i;done
 ```
 
 Insect assemblies
-```{bash eval=FALSE}
+
+``` bash
 for i in assemblies-Insects/*.fa ; do RepeatMasker -pa 20 -no_is -s -nolow -dir rm/Insects -lib seq/spoink-dmel-consensus_v1.fasta $i;done 
 ```
 
 # Selfmask, merge and score
-```{bash eval=FALSE}
+
+``` bash
 # selfmask
 RepeatMasker -pa 20 -no_is -s -nolow -dir self -lib spoink-dmel-consensus_v1.fasta spoink-dmel-consensus_v1.fasta  
 awk '{print $0,"self"}' spoink-dmel-consensus_v1.fasta.ori.out| >tmp-self.sum 
@@ -59,8 +57,10 @@ python ../score-max.py --rm Insects.sum  > Insects.score
 ```
 
 # Hit overview
+
 ## Droso
-```{bash eval=FALSE}
+
+``` bash
  142 C.costata
  830 D.aff.chauv.
  209 D.ambigua
@@ -172,9 +172,9 @@ python ../score-max.py --rm Insects.sum  > Insects.score
    1 self
 ```
 
-
 ## Insects
-```{bash eval=FALSE}
+
+``` bash
 cat Insects.sum|awk '{print $15}'|uniq -c 
  404 A.aegypti
    2 A.albimanus
@@ -278,10 +278,9 @@ cat Insects.sum|awk '{print $15}'|uniq -c
    1 self
 ```
 
-
-
 # Visualize Droso
-```{R}
+
+``` r
 sortorder<-c( 
   # melanogaster group
   "D.mel.Iso1","D.mel.RAL176",
@@ -334,7 +333,20 @@ sortorder<-c(
 )
 
 library(tidyverse)
+```
 
+    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+
+    ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
+    ## ✔ tibble  3.1.7     ✔ dplyr   1.0.9
+    ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
+    ## ✔ readr   2.1.2     ✔ forcats 0.5.1
+
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+
+``` r
 theme_set(theme_bw())
 
 h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-originOfSpoink/raw/Droso.subset.score",header=F)
@@ -346,15 +358,22 @@ t$species <- factor(t$species, levels=sortorder)
 p<- ggplot(t,aes(y=score,x=species))+geom_bar(stat="identity")+facet_grid(te~.)+ylab("similarity")+
   theme(axis.title.x=element_blank(),axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1,size=5))
 plot(p)
+```
 
+![](01-OriginOfSpoink-rm_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+``` r
 pdf(file="/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-originOfSpoink/graphs/Droso-origin.pdf",width=7,height=3)
 plot(p)
 dev.off()
 ```
 
+    ## quartz_off_screen 
+    ##                 2
 
 # Visualize Insects
-```{R}
+
+``` r
 h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-originOfSpoink/raw/Insects.score",header=F)
 names(h)<-c("te","species","score")
 
@@ -365,10 +384,15 @@ t<-subset(h,!(species %in% c("self")))
 p<- ggplot(t,aes(y=score,x=species))+geom_bar(stat="identity")+facet_grid(te~.)+ylab("similarity")+
   theme(axis.title.x=element_blank(),axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1,size=5))
 plot(p)
+```
 
+![](01-OriginOfSpoink-rm_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+``` r
 pdf(file="/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-originOfSpoink/graphs/Insects-origin.pdf",width=7,height=3)
 plot(p)
 dev.off()
-
 ```
 
+    ## quartz_off_screen 
+    ##                 2
