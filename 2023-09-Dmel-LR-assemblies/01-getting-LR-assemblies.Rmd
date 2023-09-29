@@ -180,9 +180,14 @@ nucmer -p nuco/D.mel.Iso1.nuco refgenome/Dmel.ref.fa assemblies/D.mel.Iso1.fa
 nucmer -p nuco/D.mel.AKA017.nuco refgenome/Dmel.ref.fa assemblies/D.mel.AKA017.fa
 nucmer -p nuco/D.mel.RAL737.nuco.delta refgenome/Dmel.ref.fa assemblies/D.mel.RAL737.fa 
 nucmer -p nuco/D.mel.RAL059.nuco.delta refgenome/Dmel.ref.fa assemblies/D.mel.RAL059.fa
+nucmer -p nuco/D.mel.CanS.nuco.delta refgenome/Dmel.ref.fa assemblies/D.mel.CanS.fa 
 
 # coordinates
+show-coords D.mel.AKA017.nuco.delta > D.mel.AKA017.nuco.delta.coordinates
 show-coords D.mel.RAL176.nuco.delta > D.mel.RAL176.nuco.delta.coordinates
+show-coords D.mel.RAL059.nuco.delta.delta > D.mel.RAL059.nuco.delta.coordinates
+show-coords D.mel.RAL737.nuco.delta.delta > D.mel.RAL737.nuco.delta.coordinates
+show-coords D.mel.Iso1.nuco.delta > D.mel.Iso1.nuco.delta.coordinates
 ```
 
 ### which chromosomes?
@@ -223,65 +228,175 @@ cat D.mel.AKA017.nuco.delta.coordinates|awk '$7>100000'|awk '{print $12 "-" $13}
    2 4-CM034933.1
 ```
 
+**RAL176**
+```{bash eval=FALSE}
+  42 3R-CM034792.1
+  42 2R-CM034790.1
+  32 X-CM034788.1
+  31 3L-CM034791.1
+  27 2L-CM034789.1
+   3 3R-CM034788.1
+   2 X-CM034790.1
+   2 4-CM034793.1
+```
+
+**RAL059**
+```{bash eval=FALSE}
+  52 3R-CM034806.1
+  42 2L-CM034803.1
+  41 2R-CM034804.1
+  39 3L-CM034805.1
+  36 X-CM034802.1
+   2 4-CM034807.1
+```
+
+**RAL737**
+```{bash eval=FALSE}
+  61 3R-CM034764.1
+  46 3L-CM034763.1
+  42 2R-CM034762.1
+  37 2L-CM034761.1
+  31 X-CM034760.1
+   3 4-CM034765.1
+```
+
+
+
 # Visualize
+
+**common definitions**
 ```{R}
 library(tidyverse)
 theme_set(theme_bw())
 
 boundary<-data.frame(crap=rep("rm",12),score=rep(1,12),similarity=rep(-1,12),
                      contig=c("X","X","2L","2L","2R","2R","3L","3L","3R","3R","4","4"),
-                     start=c(1,21975285,1,22510348,1,21632781,1,24592382,1,25812719,1,1341466),end=rep(-1,12),strand=rep("+",12),te=rep("spoink",12),testart=rep(1,12),teend=rep(2,12),fraclen=rep(c(0.01,1.0),6))
+                     start=c(1,21975285,1,22510348,1,21632781,1,24592382,1,25812719,1,1341466),
+                     end=rep(-1,12),strand=rep("+",12),te=rep("spoink",12),testart=rep(1,12),
+                     teend=rep(2,12),fraclen=rep(c(0.01,1.0),6))
 
-hiso<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.Iso1.fa.ori.out.clean",header=F)
-# rm	281	32.98	JAECWU010000001.1	6501457	6501784	+	spoink	1967	2300	0.06	C.costata
-# rm	316	34.41	JAECWU010000001.1	12897196	12897520	C	spoink	1953	2274	0.06	C.costata
-# rm	316	34.73	JAECWU010000001.1	13058319	13058643	C	spoink	1953	2274	0.06	C.costata
-names(hiso)<-c("crap","score","similarity","contig","start","end","strand","te","testart","teend","fraclen")
-#  66 X-JAEIGS010000021.1
-#  60 2L-JAEIGS010000190.1
-#  55 2R-JAEIGS010000001.1
-#  67 3L-JAEIGS010000103.1
-#  58 3R-JAEIGS010000049.1
-#   5 4-JAEIGS010000192.1
 
+
+chrlen<-list("X"=21975285,"2L"=22510348,"2R"=21632781,"3L"=24592382,"3R"=25812719,"4"=1341466)
+rc<-function(trc,c){
+  clen<-chrlen[[c]]
+  trc[trc$contig==c,]$start<-clen-trc[trc$contig==c,]$start+1
+  return(trc)
+}
+
+
+test<-data.frame(crap=rep("rm",12),score=rep(1,12),similarity=rep(-1,12),
+                     contig=c("X","X","X","X","X","X","3L","3L","3R","3R","4","2R"),
+                     start=c(1,21975285,5000000,10000000,15000000,20000000,1,24592382,1,25812719,1,1341466),
+                     end=rep(-1,12),strand=rep("+",12),te=rep("spoink",12),testart=rep(1,12),
+                     teend=rep(2,12),fraclen=rep(c(0.01,1.0),6))
+```
+
+
+
+**Iso-1**
+```{R}
+h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.Iso1.fa.ori.out.clean",header=F)
+names(h)<-c("crap","score","similarity","contig","start","end","strand","te","testart","teend","fraclen")
 keeporder<-c("JAEIGS010000021.1","JAEIGS010000190.1","JAEIGS010000001.1", "JAEIGS010000103.1","JAEIGS010000049.1","JAEIGS010000192.1")
-hiso<-subset(hiso,contig %in% keeporder)
-hiso$contig<-recode_factor(hiso$contig,JAEIGS010000021.1="X",JAEIGS010000190.1="2L",JAEIGS010000001.1="2R", JAEIGS010000103.1="3L",JAEIGS010000049.1="3R",JAEIGS010000192.1="4")
+h<-subset(h,contig %in% keeporder)
+h$contig<-recode_factor(h$contig,JAEIGS010000021.1="X",JAEIGS010000190.1="2L",JAEIGS010000001.1="2R", JAEIGS010000103.1="3L",JAEIGS010000049.1="3R",JAEIGS010000192.1="4")
 
-hiso<-subset(hiso,similarity<25)
-hiso<-subset(hiso,fraclen>0.01)
-hiso<-rbind(hiso,boundary)
-
-
-tiso<-ggplot()+geom_point(data=hiso,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,5000000,10000000,15000000,20000000,25000000),labels=c("0","5m","10m","15m","20m","25m"))+ylab("divergence [%]")
-plot(tiso)
+h<-subset(h,similarity<25)
+h<-subset(h,fraclen>0.01)
+h<-rbind(h,boundary)
 
 
-
-haka<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.AKA017.fa.ori.out.clean",header=F)
-names(haka)<-c("crap","score","similarity","contig","start","end","strand","te","testart","teend","fraclen")
-#  59 3R-CM034932.1
-#  44 X-CM034928.1
-#  43 3L-CM034931.1
-#  38 2R-CM034930.1
-#  36 2L-CM034929.1
-#   2 4-CM034933.1
+t<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,5000000,10000000,15000000,20000000,25000000),labels=c("0","5m","10m","15m","20m","25m"))+ylab("divergence [%]")
+plot(t)
+```
 
 
+**AKA017**
+```{R}
+h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.AKA017.fa.ori.out.clean",header=F)
+names(h)<-c("crap","score","similarity","contig","start","end","strand","te","testart","teend","fraclen")
 keeporder<-c("CM034928.1","CM034929.1","CM034930.1", "CM034931.1","CM034932.1","CM034933.1")
-haka<-subset(haka,contig %in% keeporder)
-haka$contig<-recode_factor(haka$contig, CM034928.1="X",CM034929.1="2L",CM034930.1="2R", CM034931.1="3L",CM034932.1="3R",CM034933.1="4")
-haka<-subset(haka,similarity<25)
-haka<-subset(haka,fraclen>0.01)
-haka<-rbind(haka,boundary)
+h<-subset(h,contig %in% keeporder)
+h$contig<-recode_factor(h$contig, CM034928.1="X",CM034929.1="2L",CM034930.1="2R", CM034931.1="3L",CM034932.1="3R",CM034933.1="4")
 
-taka<-ggplot()+geom_point(data=haka,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,5000000,10000000,15000000,20000000,25000000),labels=c("0","5m","10m","15m","20m","25m"))+ylab("divergence [%]")
-#+scale_size_manual(limits=c(0.0,1.0))
-plot(taka)
+h<-subset(h,similarity<25)
+h<-subset(h,fraclen>0.01)
+h<-rbind(h,boundary)
 
+t<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,5000000,10000000,15000000,20000000,25000000),labels=c("0","5m","10m","15m","20m","25m"))+ylab("divergence [%]")
+plot(t)
 #pdf(file="/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-originOfSpoink/graphs/species-histogram.pdf",width=7,height=7)
 #plot(p)
 #dev.off()
+```
+
+**RAL176**
+```{R}
+h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.RAL176.fa.ori.out.clean",header=F)
+names(h)<-c("crap","score","similarity","contig","start","end","strand","te","testart","teend","fraclen")
+#  42 3R-CM034792.1
+#  42 2R-CM034790.1
+#  32 X-CM034788.1
+#  31 3L-CM034791.1
+#  27 2L-CM034789.1
+#   3 3R-CM034788.1
+#   2 X-CM034790.1
+#   2 4-CM034793.1
+
+keeporder<-c("CM034788.1","CM034789.1","CM034790.1", "CM034791.1","CM034792.1","CM034793.1")
+h<-subset(h,contig %in% keeporder)
+h$contig<-recode_factor(h$contig, CM034788.1="X",CM034789.1="2L",CM034790.1="2R", CM034791.1="3L",CM034792.1="3R",CM034793.1="4")
+
+h<-subset(h,similarity<25)
+h<-subset(h,fraclen>0.01)
+h<-rbind(h,boundary)
+
+t<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,5000000,10000000,15000000,20000000,25000000),labels=c("0","5m","10m","15m","20m","25m"))+ylab("divergence [%]")
+plot(t)
+```
+
+
+**RAL059**
+```{R}
+h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.RAL059.fa.ori.out.clean",header=F)
+names(h)<-c("crap","score","similarity","contig","start","end","strand","te","testart","teend","fraclen")
+#  52 3R-CM034806.1
+#  42 2L-CM034803.1
+#  41 2R-CM034804.1
+#  39 3L-CM034805.1
+#  36 X-CM034802.1
+#   2 4-CM034807.1
+
+
+keeporder<-c("CM034802.1","CM034803.1","CM034804.1", "CM034805.1","CM034806.1","CM034807.1")
+h<-subset(h,contig %in% keeporder)
+h$contig<-recode_factor(h$contig, CM034802.1="X",CM034803.1="2L",CM034804.1="2R", CM034805.1="3L",CM034806.1="3R",CM034807.1="4")
+
+h<-subset(h,similarity<25)
+h<-subset(h,fraclen>0.01)
+h<-rbind(h,boundary)
+
+t<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,5000000,10000000,15000000,20000000,25000000),labels=c("0","5m","10m","15m","20m","25m"))+ylab("divergence [%]")
+plot(t)
+```
+
+
+**RAL737**
+```{R}
+h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.RAL737.fa.ori.out.clean",header=F)
+names(h)<-c("crap","score","similarity","contig","start","end","strand","te","testart","teend","fraclen")
+
+keeporder<-c("CM034760.1","CM034761.1","CM034762.1", "CM034763.1","CM034764.1","CM034765.1")
+h<-subset(h,contig %in% keeporder)
+h$contig<-recode_factor(h$contig, CM034760.1="X",CM034761.1="2L",CM034762.1="2R", CM034763.1="3L",CM034764.1="3R",CM034765.1="4")
+
+h<-subset(h,similarity<25)
+h<-subset(h,fraclen>0.01)
+h<-rbind(h,boundary)
+
+t<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,5000000,10000000,15000000,20000000,25000000),labels=c("0","5m","10m","15m","20m","25m"))+ylab("divergence [%]")
+plot(t)
 ```
 
 
