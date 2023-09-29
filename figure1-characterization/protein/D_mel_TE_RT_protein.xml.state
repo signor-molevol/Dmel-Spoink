@@ -1,0 +1,18 @@
+<itsabeastystatewerein version='2.0' sample='10000000'>
+<statenode id='Tree.t:D_mel_TE_RT_protein'>(12:1.882656848019468,(((((11:0.487150424981205,(9:0.16057263530127017,13:0.16057263530127017)26:0.3265777896799348)16:0.14592655407909538,(((1:0.24495754954416937,14:0.24495754954416937)25:0.25016677156283973,((10:0.06365682539711869,3:0.06365682539711869)23:0.03782901809459378,2:0.10148584349171247)21:0.39363847761529663)27:0.06203762654400802,(8:0.24563665286185285,7:0.24563665286185285)24:0.31152529478916424)15:0.07591503140928324)19:0.05352896572511645,4:0.6866059447854168)22:0.4919367632742747,6:1.1785427080596915)17:0.25549879719817525,(0:0.4368954806052324,5:0.4368954806052324)18:0.9971460246526344)20:0.4486153427616013)28:0.0</statenode>
+<statenode id='birthRate.t:D_mel_TE_RT_protein'>birthRate.t:D_mel_TE_RT_protein[1 1] (0.0,Infinity): 1.2407802431585864 </statenode>
+</itsabeastystatewerein>
+<!--
+{"operators":[
+{"id":"YuleBirthRateScaler.t:D_mel_TE_RT_protein","p":0.6000282449944049,"accept":116198,"reject":267820,"acceptFC":116103,"rejectFC":267387,"rejectIv":0,"rejectOp":0},
+{"id":"YuleModelTreeRootScaler.t:D_mel_TE_RT_protein","p":0.17680665164308454,"accept":59363,"reject":325666,"acceptFC":59351,"rejectFC":325130,"rejectIv":157141,"rejectOp":157141},
+{"id":"YuleModelUniformOperator.t:D_mel_TE_RT_protein","p":1.0793108662839586,"accept":1199276,"reject":2645969,"acceptFC":1194602,"rejectFC":2645333,"rejectIv":0,"rejectOp":0},
+{"id":"YuleModelSubtreeSlide.t:D_mel_TE_RT_protein","p":0.22591271750998135,"accept":152901,"reject":1771256,"acceptFC":152873,"rejectFC":1768665,"rejectIv":473932,"rejectOp":473932},
+{"id":"YuleModelNarrow.t:D_mel_TE_RT_protein","p":"NaN","accept":288720,"reject":1634388,"acceptFC":288278,"rejectFC":1632271,"rejectIv":0,"rejectOp":0},
+{"id":"YuleModelWide.t:D_mel_TE_RT_protein","p":"NaN","accept":3286,"reject":381639,"acceptFC":3280,"rejectFC":381151,"rejectIv":199048,"rejectOp":199048},
+{"id":"YuleModelWilsonBalding.t:D_mel_TE_RT_protein","p":"NaN","accept":3832,"reject":381071,"acceptFC":3824,"rejectFC":380582,"rejectIv":90811,"rejectOp":90811},
+{"id":"YuleModelBICEPSEpochTop.t:D_mel_TE_RT_protein","p":0.11234665987682078,"accept":83781,"reject":172163,"acceptFC":83674,"rejectFC":171940,"rejectIv":90072,"rejectOp":90072},
+{"id":"YuleModelBICEPSEpochAll.t:D_mel_TE_RT_protein","p":0.11574305880903955,"accept":81449,"reject":175104,"acceptFC":81338,"rejectFC":174886,"rejectIv":90683,"rejectOp":90683},
+{"id":"YuleModelBICEPSTreeFlex.t:D_mel_TE_RT_protein","p":0.0609088405214299,"accept":106971,"reject":149148,"acceptFC":106697,"rejectFC":149084,"rejectIv":0,"rejectOp":0}
+]}
+-->

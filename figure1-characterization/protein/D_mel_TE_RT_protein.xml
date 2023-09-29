@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><beast beautitemplate='Standard' beautistatus='' namespace="beast.core:beast.evolution.alignment:beast.evolution.tree.coalescent:beast.core.util:beast.evolution.nuc:beast.evolution.operators:beast.evolution.sitemodel:beast.evolution.substitutionmodel:beast.base.evolution.alignment:beast.pkgmgmt:beast.base.core:beast.base.inference:beast.base.evolution.tree.coalescent:beast.pkgmgmt:beast.base.core:beast.base.inference.util:beast.evolution.nuc:beast.base.evolution.operator:beast.base.inference.operator:beast.base.evolution.sitemodel:beast.base.evolution.substitutionmodel:beast.base.evolution.likelihood" required="BEAST.base v2.7.5" version="2.7">
+
+    <data
+id="D_mel_TE_RT_protein"
+spec="Alignment"
+dataType="aminoacid"
+name="alignment">
+        <sequence id="seq_1731" spec="Sequence" taxon="1731" totalcount="20" value="NETWKLADLPRNRRCVACKWVYSLKRDVSGRIERFKARLVAKGCSQKFGVDYFETFSPVCR-LESVRLILALAAEMQLYLHHMDVCTAYLNSELKDTVYMKQPQGFTDAANPDQVLL---LRKAIYGLKQSGREWNSKLDGVLKDLGFKACNHEPCLYQQSGQGNL---MLILVYVDDLILACQSREDMEDLKAKISESFECTD--KGPLHLFLGMEVQRDGDLGEITLGHSQYI---KELLRDYGSENCRPATTPL---------"/>
+        <sequence id="seq_297" spec="Sequence" taxon="297" totalcount="20" value="-----GLIRESNSPYNSPTWVVPKKPDASG-ANKYRVVIDYRKLNEITIPDRY----PIPN-MDEILGKLGKC----QYFTTIDLAKGFHQIEMDEE--SISKTAFS---TKSGHYE---YLRMPFGLRNAPATFQRCMNNILRPL----LN-KHCL----------------VYLDDIIIFSTSLTEHLNSIQLVFTKLADAN--L------------------KLQLDKCEFL---KKEANFLGHIV-----------------"/>
+        <sequence id="seq_412" spec="Sequence" taxon="412" totalcount="20" value="------IVEPSVSQYNSPLLLVPKKSSPNSDKKKWRLVIDYRQINKKLLADKF----PLPR-IDDILDQLGRA----KYFSCLDLMSGFHQIELDEG--SRDITSFS---TSNGSYR---FTRLPFGLKIAPNSFQRMMTIAFSGIE---PSQAF------------------LYMDDLIVIGCSEKHMLKNLTEVFGKCREYN--L------------------KLHPEKCSFF---MHEVTFLGH-------------------"/>
+        <sequence id="seq_BLOOD" spec="Sequence" taxon="BLOOD" totalcount="20" value="-----GIVEPSMSEYNSPLLLVPKKPLPNSTEKRWRLAVDYRQINKKLLSDKF----PLPR-IEDILDQLGRA----KYFSCLDLMSGFHQIELEKR--YRDITSFS---TANGSYR---FTRLPYGLKVAPNSFQRRMTLAFSGLE---PSQAF------------------LYMDDLVVIGCSEKHMLKNLTNVFELCRRHN--L------------------KLHPGKCSFF---MKEVTYLGH-------------------"/>
+        <sequence id="seq_CIRCE" spec="Sequence" taxon="CIRCE" totalcount="20" value="------IEEAPSSPWSSPVTMHIK-------PGKVRFCLDARKLNAVTVKDAY----PIPI-MDGLLSRLSPV----HCISKIDLKDAFWQIYLDQE--SRAKTAFT--VPNRPLYQ---FKRMPFGLSNAPQTMCRLMHLVIPYQ----LK-SHVL----------------VYLDDLLVLSNNFEDHLLHLSEVATQLRKAG--L------------------TINVQKSQFC---LKTVDYLGYLV-----------------"/>
+        <sequence id="seq_COPIA" spec="Sequence" taxon="COPIA" totalcount="20" value="NNTWTITKRPENKNIVDSRWVFSVKYNELGNPIRYKARLVARGFTQKYQIDYEETFAPVAR-ISSFRFILSLVIQYNLKVHQMDVKTAFLNGTLKEEIYMRLPQGIS--CNSDNVCK---LNKAIYGLKQAARCWFEVFEQALKECEFVNSSVDRCIYILD-KGNINENIYVLLYVDDVVIATGDMTRMNNFKRYLMEKFRMTD--LNEIKHFIGIRIEMQED--KIYLSQSAYV---KKILSKFNMENCNAVSTPL---------"/>
+        <sequence id="seq_DIVER" spec="Sequence" taxon="DIVER" totalcount="20" value="--------LPHHAVFKEESLTT---------KQRIVFDASARTSNGRSLNDVLCVGPTLQNDLPAVLLNWRQY----QFVFTADIQRMYRCINVHPDDTQYQRILWR---AADGVIKQHCLTTVTFGTASAPYTAIRVIHQIAEDTQTKYPMASNVLKNG-------------IYVDDILSGEHSQEAAIRKSLQTMLALKSSG--MELRKWASNDQDLMATIPLEHRCKQTSLSWDNADTIKTLGMYWLPKQD------------"/>
+        <sequence id="seq_GYPSY" spec="Sequence" taxon="GYPSY" totalcount="20" value="-----GIIRPSRSPYNSPTWVVDKKGTDAFGNPNKRLVIDFRKLNEKTIPDRY----PMPS-IPMILANLGKA----KFFTTLDLKSGYHQIYLAEH--DREKTSFS---VNGGKYE---FCRLPFGLRNASSIFQRALDDVLREQ----IG-KICY----------------VYVDDVIIFSENESDHVRHIDTVLKCLIDAN--M------------------RVSQEKTRFF---KESVEYLGFIV-----------------"/>
+        <sequence id="seq_GYPSY7" spec="Sequence" taxon="GYPSY7" totalcount="20" value="-----GIIRPARSPYNSPVWVVDKKGTDDQGCRHKRMVIDFRKLNFKTVDDKY----PIPN-ITCILSNLGKA----RFFSTLDPKSGFHQILLAEK--DREKTAFI----ANGKYE---FC-LPFGLKNPPSILQRAIDDVLRDE-----------------------------IRKSIIFLERLEDHVDHIRWELDRLFEA---------------------------------------------------------------"/>
+        <sequence id="seq_INVADER6" spec="Sequence" taxon="INVADER6" totalcount="20" value="------IIRPSSSPFASPVLLVKKK------NGSDRLCVDYRELNTNTVAEKY----PLPL-ISDQISRLRGA----SFFSCLDMASGFHQIPIHAN--SIERTAFV---TPDGQFE---FLTMPFGLKNAPSVFQRAVMKALGE-----LAHSYVI----------------VYMDDIMIIAETKEEAFVRLRTVLKILSQAG--F------------------SFNIGKCSFL---KSCIEYLGFVV-----------------"/>
+        <sequence id="seq_MDG1" spec="Sequence" taxon="MDG1" totalcount="20" value="-----GIVEQSISEYNSPLLLVPKKSLPNSEEKRWRLVVDYRQINKKLLADKF----PLPR-IEDILDQLGRA----KYFSCLDLMSGFHQIELDER--SRNITSFS---TSTGAYR---YTRLPFGLKIAPNSFQRMMTLAFSGLT---PSQAF------------------LYMDDLVVIGCSEKHMLKNLTDVFKLCRQHN--L------------------KLHPEKCTFF---MKEVTYLGH-------------------"/>
+        <sequence id="seq_MDG3" spec="Sequence" taxon="MDG3" totalcount="20" value="-----GFIRPSDSEYASPIVLVKKK------TGDLRMCVDFRKLNKMTMKDNY----PLPL-IDDLLDRMNEK----TVFTKLDLKNGFFHVHVKKE--SIKYTSFV---TPLGQYE---WLRMPFGLKNAPSVFQRFVNKIFADM----IRENKVV----------------VYMDDILLATENINEHLETLKEIFKRLVENK--L------------------ELRIDKCEFM---QSSIKYLGFII-----------------"/>
+        <sequence id="seq_ROO" spec="Sequence" taxon="ROO" totalcount="20" value="-----ILFTPSSN------------------HQAWKLNYEATSSFXRIRKDDKWTK-PKXR-YYSWSXDSKGYIRYSNXLAQVAICYGSXHXKIVS--------------PNKGCXE---RPRIPI----YPMERSKIADQVVNNRNLWHIGSTFLSSPMS------------TRVGRSLLPRGRLSRNNRRLLYGHHNWWRHSQVLRTSKEIETSDGEGRHASAKMGCKRTYFS---HSGRRCYGENLHGEIDQNLRTSMGSEEG"/>
+        <sequence id="seq_SPOINK" spec="Sequence" taxon="SPOINK" totalcount="20" value="------VIKPSCSPFASPIMLVNKK------DGSHRLCVDYRELNGNTVADRY----PLPL-ISDQIARLHGA----KYFTCLDMASGYYQIPMHED--SVECTAFV---TPDGQYE---FLAMPFGLKNAPSVFQRTVIQALGD-----LANTFVV----------------VYMDDVMVAASTKTEALERLKITLDCLTCAG--F------------------SFNIKKCSFL---KSTVQYLGYEV-----------------"/>
+        <sequence id="seq_TIRANT" spec="Sequence" taxon="TIRANT" totalcount="20" value="------IIKSSYSPWSAPVWVVPKKITPTG-EQKWRLVIDYRKLNEKTISDRY----PIPN-IADILDRLGKA----KYFSTLDLASGFHQIEMNPD--DTPKTAFT---VEGGHYE---FIRMPFGLKNAPATFQRVMDNIFGDL----IG-TICL----------------VYLDDIIIFSTSLQEHFIHLKTIFGRLRSAN--F------------------KVQLTKSYFL---RRETEFLGHIV-----------------"/>
+    </data>
+
+    <map name="Uniform" >beast.base.inference.distribution.Uniform</map>
+
+    <map name="Exponential" >beast.base.inference.distribution.Exponential</map>
+
+    <map name="LogNormal" >beast.base.inference.distribution.LogNormalDistributionModel</map>
+
+    <map name="Normal" >beast.base.inference.distribution.Normal</map>
+
+    <map name="Beta" >beast.base.inference.distribution.Beta</map>
+
+    <map name="Gamma" >beast.base.inference.distribution.Gamma</map>
+
+    <map name="LaplaceDistribution" >beast.base.inference.distribution.LaplaceDistribution</map>
+
+    <map name="prior" >beast.base.inference.distribution.Prior</map>
+
+    <map name="InverseGamma" >beast.base.inference.distribution.InverseGamma</map>
+
+    <map name="OneOnX" >beast.base.inference.distribution.OneOnX</map>
+
+    <run id="mcmc" spec="MCMC" chainLength="10000000">
+        <state id="state" spec="State" storeEvery="5000">
+            <tree id="Tree.t:D_mel_TE_RT_protein" spec="beast.base.evolution.tree.Tree" name="stateNode">
+                <taxonset id="TaxonSet.D_mel_TE_RT_protein" spec="TaxonSet">
+                    <alignment idref="D_mel_TE_RT_protein"/>
+                </taxonset>
+            </tree>
+            <parameter id="birthRate.t:D_mel_TE_RT_protein" spec="parameter.RealParameter" lower="0.0" name="stateNode">1.0</parameter>
+        </state>
+        <init id="RandomTree.t:D_mel_TE_RT_protein" spec="RandomTree" estimate="false" initial="@Tree.t:D_mel_TE_RT_protein" taxa="@D_mel_TE_RT_protein">
+            <populationModel id="ConstantPopulation0.t:D_mel_TE_RT_protein" spec="ConstantPopulation">
+                <parameter id="randomPopSize.t:D_mel_TE_RT_protein" spec="parameter.RealParameter" name="popSize">1.0</parameter>
+            </populationModel>
+        </init>
+        <distribution id="posterior" spec="CompoundDistribution">
+            <distribution id="prior" spec="CompoundDistribution">
+                <distribution id="YuleModel.t:D_mel_TE_RT_protein" spec="beast.base.evolution.speciation.YuleModel" birthDiffRate="@birthRate.t:D_mel_TE_RT_protein" tree="@Tree.t:D_mel_TE_RT_protein"/>
+                <prior id="YuleBirthRatePrior.t:D_mel_TE_RT_protein" name="distribution" x="@birthRate.t:D_mel_TE_RT_protein">
+                    <Uniform id="Uniform.1" name="distr" upper="Infinity"/>
+                </prior>
+            </distribution>
+            <distribution id="likelihood" spec="CompoundDistribution" useThreads="true">
+                <distribution id="treeLikelihood.D_mel_TE_RT_protein" spec="ThreadedTreeLikelihood" data="@D_mel_TE_RT_protein" tree="@Tree.t:D_mel_TE_RT_protein">
+                    <siteModel id="SiteModel.s:D_mel_TE_RT_protein" spec="SiteModel">
+                        <parameter id="mutationRate.s:D_mel_TE_RT_protein" spec="parameter.RealParameter" estimate="false" lower="0.0" name="mutationRate">1.0</parameter>
+                        <parameter id="gammaShape.s:D_mel_TE_RT_protein" spec="parameter.RealParameter" estimate="false" lower="0.1" name="shape">1.0</parameter>
+                        <parameter id="proportionInvariant.s:D_mel_TE_RT_protein" spec="parameter.RealParameter" estimate="false" lower="0.0" name="proportionInvariant" upper="1.0">0.0</parameter>
+                        <substModel id="Blosum62.s:D_mel_TE_RT_protein" spec="Blosum62"/>
+                    </siteModel>
+                    <branchRateModel id="StrictClock.c:D_mel_TE_RT_protein" spec="beast.base.evolution.branchratemodel.StrictClockModel">
+                        <parameter id="clockRate.c:D_mel_TE_RT_protein" spec="parameter.RealParameter" estimate="false" lower="0.0" name="clock.rate">1.0</parameter>
+                    </branchRateModel>
+                </distribution>
+            </distribution>
+        </distribution>
+        <operator id="YuleBirthRateScaler.t:D_mel_TE_RT_protein" spec="kernel.BactrianScaleOperator" parameter="@birthRate.t:D_mel_TE_RT_protein" upper="10.0" weight="3.0"/>
+        <operator id="YuleModelTreeRootScaler.t:D_mel_TE_RT_protein" spec="kernel.BactrianScaleOperator" rootOnly="true" scaleFactor="0.5" tree="@Tree.t:D_mel_TE_RT_protein" upper="10.0" weight="3.0"/>
+        <operator id="YuleModelUniformOperator.t:D_mel_TE_RT_protein" spec="kernel.BactrianNodeOperator" tree="@Tree.t:D_mel_TE_RT_protein" weight="30.0"/>
+        <operator id="YuleModelSubtreeSlide.t:D_mel_TE_RT_protein" spec="kernel.BactrianSubtreeSlide" tree="@Tree.t:D_mel_TE_RT_protein" weight="15.0"/>
+        <operator id="YuleModelNarrow.t:D_mel_TE_RT_protein" spec="Exchange" tree="@Tree.t:D_mel_TE_RT_protein" weight="15.0"/>
+        <operator id="YuleModelWide.t:D_mel_TE_RT_protein" spec="Exchange" isNarrow="false" tree="@Tree.t:D_mel_TE_RT_protein" weight="3.0"/>
+        <operator id="YuleModelWilsonBalding.t:D_mel_TE_RT_protein" spec="WilsonBalding" tree="@Tree.t:D_mel_TE_RT_protein" weight="3.0"/>
+        <operator id="YuleModelBICEPSEpochTop.t:D_mel_TE_RT_protein" spec="EpochFlexOperator" scaleFactor="0.1" tree="@Tree.t:D_mel_TE_RT_protein" weight="2.0"/>
+        <operator id="YuleModelBICEPSEpochAll.t:D_mel_TE_RT_protein" spec="EpochFlexOperator" fromOldestTipOnly="false" scaleFactor="0.1" tree="@Tree.t:D_mel_TE_RT_protein" weight="2.0"/>
+        <operator id="YuleModelBICEPSTreeFlex.t:D_mel_TE_RT_protein" spec="TreeStretchOperator" scaleFactor="0.01" tree="@Tree.t:D_mel_TE_RT_protein" weight="2.0"/>
+        <logger id="tracelog" spec="Logger" fileName="$(filebase).log" logEvery="1000" model="@posterior" sanitiseHeaders="true" sort="smart">
+            <log idref="posterior"/>
+            <log idref="likelihood"/>
+            <log idref="prior"/>
+            <log idref="treeLikelihood.D_mel_TE_RT_protein"/>
+            <log id="TreeHeight.t:D_mel_TE_RT_protein" spec="beast.base.evolution.tree.TreeStatLogger" tree="@Tree.t:D_mel_TE_RT_protein"/>
+            <log idref="YuleModel.t:D_mel_TE_RT_protein"/>
+            <log idref="birthRate.t:D_mel_TE_RT_protein"/>
+        </logger>
+        <logger id="screenlog" spec="Logger" logEvery="1000">
+            <log idref="posterior"/>
+            <log idref="likelihood"/>
+            <log idref="prior"/>
+        </logger>
+        <logger id="treelog.t:D_mel_TE_RT_protein" spec="Logger" fileName="$(filebase)-$(tree).trees" logEvery="1000" mode="tree">
+            <log id="TreeWithMetaDataLogger.t:D_mel_TE_RT_protein" spec="beast.base.evolution.TreeWithMetaDataLogger" tree="@Tree.t:D_mel_TE_RT_protein"/>
+        </logger>
+        <operatorschedule id="OperatorSchedule" spec="OperatorSchedule"/>
+    </run>
+
+</beast>
