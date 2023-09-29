@@ -51,7 +51,7 @@ cat Insects/tmp-merged-Insects.sum ../seq/self/tmp-self.sum >Insects.sum
 
 # Score (the highest)
 # the highest score among all Droso or Insects is set to 1.0 (including self)
-cat Droso.sum|grep -v "D.mel.RAL91\|D.mel.RAL732\|D.sim.SZ*\|D.mau.R*\|D.mel.Pi2\|D.mel.Es_Ten\|D.mel.RAL737\|D.mel.SE_Sto" > Droso.subset.sum  
+cat Droso.sum|grep -v "D.mel.RAL91\|D.mel.RAL732\|D.sim.SZ*\|D.mau.R39\|D.mau.R31\|D.mau.R32\|D.mau.R61\|D.mel.Pi2\|D.mel.Es_Ten\|D.mel.RAL737\|D.mel.SE_Sto" > Droso.subset.sum
 python ../score-max.py --rm Droso.subset.sum >Droso.subset.score
 python ../score-max.py --rm Insects.sum  > Insects.score
 ```
