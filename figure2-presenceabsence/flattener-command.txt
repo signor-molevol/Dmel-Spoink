@@ -1,0 +1,1 @@
+python /Volumes/EXT-RICCARDO/Dmel-spoink/scripts/low-complexity-flattener.py /Volumes/EXT-RICCARDO/Dmel-spoink/analysis/mapped/spoink/deviaTE/ 4630 4700 /Volumes/EXT-RICCARDO/Dmel-spoink/analysis/mapped/spoink/flattened/
