@@ -1,0 +1,57 @@
+Gonzalez - analysis (MCTE)
+================
+roko
+9/8/2023
+
+# Prepare make the results more easily readable
+
+``` bash
+reader-rm.py Droso.subset.sum|rm-cleanup.py > Droso.subset.cleanup
+```
+
+# Visualize Insects
+
+``` r
+library(tidyverse)
+```
+
+    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+
+    ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
+    ## ✔ tibble  3.1.7     ✔ dplyr   1.0.9
+    ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
+    ## ✔ readr   2.1.2     ✔ forcats 0.5.1
+
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+
+``` r
+theme_set(theme_bw())
+
+h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-originOfSpoink/raw/Droso.subset.cleanup",header=F)
+# rm    281 32.98   JAECWU010000001.1   6501457 6501784 +   spoink  1967    2300    0.06    C.costata
+# rm    316 34.41   JAECWU010000001.1   12897196    12897520    C   spoink  1953    2274    0.06    C.costata
+# rm    316 34.73   JAECWU010000001.1   13058319    13058643    C   spoink  1953    2274    0.06    C.costata
+names(h)<-c("crap","score","similarity","contig","start","end","strand","te","testart","teend","fraclen","species")
+
+myspec<-c("D.mel.Iso1","D.mel.RAL176","D.sechellia","D.cardini","D.repleta","D.willistoni.00","D.willistoni.17","D.paulistorum.12","D.paulistorum.06","D.tropicalis","D.insularis", "D.equinoxialis")
+t<-subset(h,species %in% myspec)
+t<-subset(t,fraclen>0.5)
+
+
+
+p<- ggplot(t,aes(x=similarity))+geom_histogram(binwidth=0.5)+facet_wrap(~species)
+plot(p)
+```
+
+![](02-OOS-sequencevariation_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+``` r
+pdf(file="/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-originOfSpoink/graphs/species-histogram.pdf",width=7,height=7)
+plot(p)
+dev.off()
+```
+
+    ## quartz_off_screen 
+    ##                 2
