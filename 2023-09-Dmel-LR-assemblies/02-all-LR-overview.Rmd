@@ -1,0 +1,21 @@
+---
+title: "Gonzalez - analysis (MCTE)"
+author: "roko"
+date: "9/8/2023"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, python.reticulate = FALSE)
+```
+
+
+# Prepare   
+
+```{bash eval=FALSE}
+# merge all clean files
+for i in *ori.out; do awk '{print $0,FILENAME}' $i |perl -pe 's/\.fa\.ori\.out//'
+for i in *ori.out.clean; do awk '{print $0,FILENAME}' $i |perl -pe 's/\.fa\.ori\.out\.clean//'; done > merged.clean.sum
+
+```
+

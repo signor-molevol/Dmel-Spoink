@@ -308,10 +308,16 @@ test<-data.frame(crap=rep("rm",12),score=rep(1,12),similarity=rep(-1,12),
                      teend=rep(2,12),fraclen=rep(c(0.01,1.0),6))
 ```
 
+**sort**
+
+``` bash
+cat D.mel.RAL737.fa.ori.out.clean|sort -k11,11n > D.mel.RAL737.fa.ori.out.clean.sort 
+```
+
 **Iso-1**
 
 ``` r
-h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.Iso1.fa.ori.out.clean",header=F)
+h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.Iso1.fa.ori.out.clean.sort",header=F)
 names(h)<-c("crap","score","similarity","contig","start","end","strand","te","testart","teend","fraclen")
 keeporder<-c("JAEIGS010000021.1","JAEIGS010000190.1","JAEIGS010000001.1", "JAEIGS010000103.1","JAEIGS010000049.1","JAEIGS010000192.1")
 h<-subset(h,contig %in% keeporder)
@@ -322,13 +328,51 @@ h<-subset(h,fraclen>0.01)
 h<-rbind(h,boundary)
 
 
-t<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,5000000,10000000,15000000,20000000,25000000),labels=c("0","5m","10m","15m","20m","25m"))+ylab("divergence [%]")
+t<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")
 plot(t)
 ```
 
     ## Warning: Removed 12 rows containing missing values (geom_point).
 
-![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+``` r
+pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.Iso1.pdf",width=7,height=2.5)
+plot(t)
+```
+
+    ## Warning: Removed 12 rows containing missing values (geom_point).
+
+``` r
+dev.off()
+```
+
+    ## quartz_off_screen 
+    ##                 2
+
+``` r
+t2<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,color=fraclen),size=2,alpha=0.8)+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")+
+  scale_colour_gradient(high="blue",low="red")
+plot(t2)
+```
+
+    ## Warning: Removed 12 rows containing missing values (geom_point).
+
+![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+
+``` r
+pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.Iso1.heatmap.pdf",width=7,height=2)
+plot(t2)
+```
+
+    ## Warning: Removed 12 rows containing missing values (geom_point).
+
+``` r
+dev.off()
+```
+
+    ## quartz_off_screen 
+    ##                 2
 
 **AKA017**
 
@@ -349,7 +393,7 @@ plot(t)
 
     ## Warning: Removed 12 rows containing missing values (geom_point).
 
-![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
 ``` r
 #pdf(file="/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-originOfSpoink/graphs/species-histogram.pdf",width=7,height=7)
@@ -385,7 +429,7 @@ plot(t)
 
     ## Warning: Removed 12 rows containing missing values (geom_point).
 
-![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
 
 **RAL059**
 
@@ -414,12 +458,12 @@ plot(t)
 
     ## Warning: Removed 12 rows containing missing values (geom_point).
 
-![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 **RAL737**
 
 ``` r
-h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.RAL737.fa.ori.out.clean",header=F)
+h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.RAL737.fa.ori.out.clean.sort",header=F)
 names(h)<-c("crap","score","similarity","contig","start","end","strand","te","testart","teend","fraclen")
 
 keeporder<-c("CM034760.1","CM034761.1","CM034762.1", "CM034763.1","CM034764.1","CM034765.1")
@@ -430,10 +474,48 @@ h<-subset(h,similarity<25)
 h<-subset(h,fraclen>0.01)
 h<-rbind(h,boundary)
 
-t<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,5000000,10000000,15000000,20000000,25000000),labels=c("0","5m","10m","15m","20m","25m"))+ylab("divergence [%]")
+t<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")
 plot(t)
 ```
 
     ## Warning: Removed 12 rows containing missing values (geom_point).
 
-![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+``` r
+pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.RAL737.pdf",width=7,height=2.5)
+plot(t)
+```
+
+    ## Warning: Removed 12 rows containing missing values (geom_point).
+
+``` r
+dev.off()
+```
+
+    ## quartz_off_screen 
+    ##                 2
+
+``` r
+t2<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,color=fraclen),size=2,alpha=0.8)+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")+
+  scale_colour_gradient(low="red",high="blue")
+plot(t2)
+```
+
+    ## Warning: Removed 12 rows containing missing values (geom_point).
+
+![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->
+
+``` r
+pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.RAL737.heatmap.pdf",width=7,height=2)
+plot(t2)
+```
+
+    ## Warning: Removed 12 rows containing missing values (geom_point).
+
+``` r
+dev.off()
+```
+
+    ## quartz_off_screen 
+    ##                 2

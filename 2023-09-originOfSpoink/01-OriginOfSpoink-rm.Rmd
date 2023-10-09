@@ -58,7 +58,9 @@ cat Insects/tmp-merged-Insects.sum ../seq/self/tmp-self.sum >Insects.sum
 # Score (the highest)
 # the highest score among all Droso or Insects is set to 1.0 (including self)
 cat Droso.sum|grep -v "D.mel.RAL91\|D.mel.RAL732\|D.sim.SZ*\|D.mau.R39\|D.mau.R31\|D.mau.R32\|D.mau.R61\|D.mel.Pi2\|D.mel.Es_Ten\|D.mel.RAL737\|D.mel.SE_Sto" > Droso.subset.sum
+cat Droso.sum | grep -v "D.mel.RAL91\|D.mel.RAL732\|D.sim.SZ*\|D.mau.R39\|D.mau.R31\|D.mau.R32\|D.mau.R61\|D.mel.Pi2\|D.mel.Es_Ten\|D.mel.RAL176\|D.mel.SE_Sto" > Droso.subset2.sum
 python ../score-max.py --rm Droso.subset.sum >Droso.subset.score
+python ../score-max.py --rm Droso.subset2.sum >Droso.subset2.score
 python ../score-max.py --rm Insects.sum  > Insects.score
 ```
 
@@ -288,7 +290,8 @@ cat Insects.sum|awk '{print $15}'|uniq -c
 ```{R}
 sortorder<-c( 
   # melanogaster group
-  "D.mel.Iso1","D.mel.RAL176",
+  "D.mel.Iso1","D.mel.RAL737",
+  #"D.mel.RAL176",
   "D.sim.006",
   #"D.sim.SZ232","D.sim.SZ129",
   "D.mau.01",
@@ -341,7 +344,7 @@ library(tidyverse)
 
 theme_set(theme_bw())
 
-h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-originOfSpoink/raw/Droso.subset.score",header=F)
+h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-originOfSpoink/raw/Droso.subset2.score",header=F)
 names(h)<-c("te","species","score")
 t<-subset(h,species %in% sortorder)
 t$species <- factor(t$species, levels=sortorder)

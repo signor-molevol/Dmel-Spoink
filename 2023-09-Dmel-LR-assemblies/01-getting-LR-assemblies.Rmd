@@ -292,11 +292,15 @@ test<-data.frame(crap=rep("rm",12),score=rep(1,12),similarity=rep(-1,12),
                      teend=rep(2,12),fraclen=rep(c(0.01,1.0),6))
 ```
 
+**sort**
+```{bash eval=FALSE}
+cat D.mel.RAL737.fa.ori.out.clean|sort -k11,11n > D.mel.RAL737.fa.ori.out.clean.sort 
+```
 
 
 **Iso-1**
 ```{R}
-h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.Iso1.fa.ori.out.clean",header=F)
+h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.Iso1.fa.ori.out.clean.sort",header=F)
 names(h)<-c("crap","score","similarity","contig","start","end","strand","te","testart","teend","fraclen")
 keeporder<-c("JAEIGS010000021.1","JAEIGS010000190.1","JAEIGS010000001.1", "JAEIGS010000103.1","JAEIGS010000049.1","JAEIGS010000192.1")
 h<-subset(h,contig %in% keeporder)
@@ -307,8 +311,19 @@ h<-subset(h,fraclen>0.01)
 h<-rbind(h,boundary)
 
 
-t<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,5000000,10000000,15000000,20000000,25000000),labels=c("0","5m","10m","15m","20m","25m"))+ylab("divergence [%]")
+t<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")
 plot(t)
+pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.Iso1.pdf",width=7,height=2.5)
+plot(t)
+dev.off()
+
+
+t2<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,color=fraclen),size=2,alpha=0.8)+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")+
+  scale_colour_gradient(high="blue",low="red")
+plot(t2)
+pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.Iso1.heatmap.pdf",width=7,height=2)
+plot(t2)
+dev.off()
 ```
 
 
@@ -384,7 +399,7 @@ plot(t)
 
 **RAL737**
 ```{R}
-h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.RAL737.fa.ori.out.clean",header=F)
+h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.RAL737.fa.ori.out.clean.sort",header=F)
 names(h)<-c("crap","score","similarity","contig","start","end","strand","te","testart","teend","fraclen")
 
 keeporder<-c("CM034760.1","CM034761.1","CM034762.1", "CM034763.1","CM034764.1","CM034765.1")
@@ -395,8 +410,18 @@ h<-subset(h,similarity<25)
 h<-subset(h,fraclen>0.01)
 h<-rbind(h,boundary)
 
-t<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,5000000,10000000,15000000,20000000,25000000),labels=c("0","5m","10m","15m","20m","25m"))+ylab("divergence [%]")
+t<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")
 plot(t)
+pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.RAL737.pdf",width=7,height=2.5)
+plot(t)
+dev.off()
+
+t2<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,color=fraclen),size=2,alpha=0.8)+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")+
+  scale_colour_gradient(low="red",high="blue")
+plot(t2)
+pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.RAL737.heatmap.pdf",width=7,height=2)
+plot(t2)
+dev.off()
 ```
 
 
