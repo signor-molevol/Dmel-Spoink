@@ -1,0 +1,52 @@
+---
+title: "Drosophila melanogaster - Spoink invasion timing"
+output: rmarkdown::github_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+    author: Riccardo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(knitr))
+suppressPackageStartupMessages(library(kableExtra))
+suppressPackageStartupMessages(library(ggpubr))
+suppressPackageStartupMessages(library(svglite))
+theme_set(theme_bw())
+```
+
+```{r}
+meta_pool <- read_tsv("/Volumes/EXT-RICCARDO/Dmel-spoink/other-data/dmel-pool-providence/dmel-full-metadata.txt")
+```
+
+```{r}
+pool <- read_csv("/Volumes/EXT-RICCARDO/analysis/csv/Dmel/P-ele/D_mel_pool+gdl.csv", show_col_types = FALSE) %>% filter(Sample!="Sample") %>% inner_join(meta_pool, by="Sample") %>% type_convert() %>% distinct() %>% mutate(presence = ifelse(HQ_reads > 2, "present", "absent"))
+
+after1940 <- pool %>% filter(year>1940)
+spoink_pool <- after1940 %>% filter(TE=="gypsy-7-sim1") %>% arrange(year)
+P_pool <- after1940 %>% filter(TE=="PPI251") %>% arrange(year)
+(TEs <- bind_rows(spoink_pool, P_pool) %>% mutate(TE = ifelse(TE=="gypsy-7-sim1", "Spoink", "P-element")))
+TEs$TE <- factor(TEs$TE, levels = c("Spoink", "P-element"))
+
+#(plot_spoink <- ggplot(spoink_pool, aes(x=year, y=HQ_reads, color=presence)) + geom_point(alpha=0.5) +
+    #labs(y = "copynumber", x = "collection year") + ggtitle("spoink") +
+    #scale_x_continuous(breaks = seq(1940, max(spoink_pool$year), by = 10), labels = seq(1940, max(spoink_pool$year), by = 10))+
+    #scale_color_manual(values=c("darkgreen", "red"))+
+    #theme(plot.title = element_text(hjust = 0.5)))
+
+(timeline <- ggplot(TEs, aes(x=year, y=HQ_reads, color=presence)) + geom_point(alpha=0.5) +
+    labs(y = "copynumber", x = "") +
+    scale_x_continuous(breaks = seq(1940, max(spoink_pool$year), by = 10), labels = seq(1940, max(spoink_pool$year), by = 10))+
+    scale_color_manual(values=c("darkgreen", "red"))+
+    facet_grid(TE ~ .)+
+    theme(legend.position = "none"))
+```
+
+```{r}
+#ggsave("/Volumes/EXT-RICCARDO/Dmel-spoink/paper/figure3-timing/timing-invasion.svg", plot = timeline, width = 12)
+```
