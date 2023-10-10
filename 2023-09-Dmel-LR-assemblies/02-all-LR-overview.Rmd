@@ -50,11 +50,19 @@ p<- ggplot(h,aes(y=count,x=reorder(name,year),fill=continent))+geom_bar(stat="id
  theme(axis.title.x=element_blank(),axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1,size=8))
 plot(p)
 
-#t<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")
-#plot(t)
+h<-subset(h,frag=="full length")
+h$ap<-"abs"
+h[h$count>0,]$ap<-"pres"
+h[h$count==0,]$count<- -1
 
+#
 
-#plot(t)
-#pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.RAL737.heatmap.pdf",width=7,height=2)
-#dev.off()
+p<- ggplot(h,aes(y=count,x=reorder(name,year),fill=ap))+geom_bar(stat="identity")+ylab("count")+
+  scale_fill_manual(values=c("#016301","#FF0505"))+
+ theme(legend.position = "none", axis.title.x=element_blank(),axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1,size=8))
+plot(p)
+
+pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/lr-timeline.pdf",width=7,height=3)
+plot(p)
+dev.off()
 ```
