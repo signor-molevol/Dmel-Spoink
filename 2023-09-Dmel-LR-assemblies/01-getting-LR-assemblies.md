@@ -179,6 +179,8 @@ nucmer -p nuco/D.mel.AKA017.nuco refgenome/Dmel.ref.fa assemblies/D.mel.AKA017.f
 nucmer -p nuco/D.mel.RAL737.nuco.delta refgenome/Dmel.ref.fa assemblies/D.mel.RAL737.fa 
 nucmer -p nuco/D.mel.RAL059.nuco.delta refgenome/Dmel.ref.fa assemblies/D.mel.RAL059.fa
 nucmer -p nuco/D.mel.CanS.nuco.delta refgenome/Dmel.ref.fa assemblies/D.mel.CanS.fa 
+nucmer -p nuco/D.mel.ORE.nuco refgenome/Dmel.ref.fa assemblies/D.mel.ORE.fa 
+nucmer -p nuco/D.mel.A7.nuco refgenome/Dmel.ref.fa assemblies/D.mel.A7.fa 
 
 # coordinates
 show-coords D.mel.AKA017.nuco.delta > D.mel.AKA017.nuco.delta.coordinates
@@ -186,9 +188,44 @@ show-coords D.mel.RAL176.nuco.delta > D.mel.RAL176.nuco.delta.coordinates
 show-coords D.mel.RAL059.nuco.delta.delta > D.mel.RAL059.nuco.delta.coordinates
 show-coords D.mel.RAL737.nuco.delta.delta > D.mel.RAL737.nuco.delta.coordinates
 show-coords D.mel.Iso1.nuco.delta > D.mel.Iso1.nuco.delta.coordinates
+show-coords D.mel.CanS.nuco.delta.delta > D.mel.CanS.nuco.delta.coordinates
+show-coords D.mel.ORE.nuco.delta > D.mel.ORE.nuco.delta.coordinates
 ```
 
 ### which chromosomes?
+
+**A7**
+
+``` bash
+  46 3R-CM010580.1
+  41 3L-CM010579.1
+  40 2L-CM010577.1
+  39 2R-CM010578.1
+  29 X-CM010576.1
+   2 4-CM010581.1
+```
+
+**CanS**
+
+``` bash
+  52 3R-CM027568.1
+  51 2L-CM027565.1
+  44 3L-CM027567.1
+  39 X-CM027564.1
+  38 2R-CM027566.1
+   3 4-CM027569.1
+```
+
+**ORE**
+
+``` bash
+  64 3R-CM010517.1
+  48 2R-CM010515.1
+  43 3L-CM010516.1
+  42 2L-CM010514.1
+  39 X-CM010513.1
+   3 4-CM010518.1
+```
 
 **Iso1**
 
@@ -289,7 +326,7 @@ boundary<-data.frame(crap=rep("rm",12),score=rep(1,12),similarity=rep(-1,12),
                      contig=c("X","X","2L","2L","2R","2R","3L","3L","3R","3R","4","4"),
                      start=c(1,21975285,1,22510348,1,21632781,1,24592382,1,25812719,1,1341466),
                      end=rep(-1,12),strand=rep("+",12),te=rep("spoink",12),testart=rep(1,12),
-                     teend=rep(2,12),fraclen=rep(c(0.01,1.0),6))
+                     teend=rep(2,12),fraclen=rep(c(0.1,1.0),6))
 
 
 
@@ -311,7 +348,8 @@ test<-data.frame(crap=rep("rm",12),score=rep(1,12),similarity=rep(-1,12),
 **sort**
 
 ``` bash
-cat D.mel.RAL737.fa.ori.out.clean|sort -k11,11n > D.mel.RAL737.fa.ori.out.clean.sort 
+cat D.mel.RAL737.fa.ori.out.clean | sort -k11,11n > D.mel.RAL737.fa.ori.out.clean.sort 
+cat D.mel.Iso1.fa.ori.out.clean | sort -k11,11n > D.mel.Iso1.fa.ori.out.clean.sort 
 ```
 
 **Iso-1**
@@ -324,7 +362,7 @@ h<-subset(h,contig %in% keeporder)
 h$contig<-recode_factor(h$contig,JAEIGS010000021.1="X",JAEIGS010000190.1="2L",JAEIGS010000001.1="2R", JAEIGS010000103.1="3L",JAEIGS010000049.1="3R",JAEIGS010000192.1="4")
 
 h<-subset(h,similarity<25)
-h<-subset(h,fraclen>0.01)
+h<-subset(h,fraclen>0.1)
 h<-rbind(h,boundary)
 
 
@@ -334,7 +372,7 @@ plot(t)
 
     ## Warning: Removed 12 rows containing missing values (geom_point).
 
-![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 ``` r
 pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.Iso1.pdf",width=7,height=2.5)
@@ -358,10 +396,140 @@ plot(t2)
 
     ## Warning: Removed 12 rows containing missing values (geom_point).
 
-![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->
 
 ``` r
 pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.Iso1.heatmap.pdf",width=7,height=2)
+plot(t2)
+```
+
+    ## Warning: Removed 12 rows containing missing values (geom_point).
+
+``` r
+dev.off()
+```
+
+    ## quartz_off_screen 
+    ##                 2
+
+**A7**
+
+``` r
+h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.A7.fa.ori.out.clean",header=F)
+names(h)<-c("crap","score","similarity","contig","start","end","strand","te","testart","teend","fraclen")
+#  46 3R-CM010580.1
+#  41 3L-CM010579.1
+#  40 2L-CM010577.1
+#  39 2R-CM010578.1
+#  29 X-CM010576.1
+#   2 4-CM010581.1
+
+keeporder<-c("CM010576.1","CM010577.1","CM010578.1", "CM010579.1","CM010580.1","CM010581.1")
+h<-subset(h,contig %in% keeporder)
+h$contig<-recode_factor(h$contig,CM010576.1="X",CM010577.1="2L",CM010578.1="2R", CM010579.1="3L",CM010580.1="3R",CM010581.1="4")
+
+h<-subset(h,similarity<25)
+h<-subset(h,fraclen>0.1)
+h<-rbind(h,boundary)
+
+t2<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,color=fraclen),size=2,alpha=0.8)+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")+
+  scale_colour_gradient(high="blue",low="red")
+plot(t2)
+```
+
+    ## Warning: Removed 12 rows containing missing values (geom_point).
+
+![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+``` r
+pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.A7.heatmap.pdf",width=7,height=2)
+plot(t2)
+```
+
+    ## Warning: Removed 12 rows containing missing values (geom_point).
+
+``` r
+dev.off()
+```
+
+    ## quartz_off_screen 
+    ##                 2
+
+**ORE**
+
+``` r
+h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.ORE.fa.ori.out.clean",header=F)
+names(h)<-c("crap","score","similarity","contig","start","end","strand","te","testart","teend","fraclen")
+#  64 3R-CM010517.1
+#  48 2R-CM010515.1
+#  43 3L-CM010516.1
+#  42 2L-CM010514.1
+#  39 X-CM010513.1
+#   3 4-CM010518.1
+
+
+keeporder<-c("CM010513.1","CM010514.1","CM010515.1", "CM010516.1","CM010517.1","CM010518.1")
+h<-subset(h,contig %in% keeporder)
+h$contig<-recode_factor(h$contig,CM010513.1="X",CM010514.1="2L",CM010515.1="2R", CM010516.1="3L",CM010517.1="3R",CM010518.1="4")
+
+h<-subset(h,similarity<25)
+h<-subset(h,fraclen>0.1)
+h<-rbind(h,boundary)
+
+t2<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,color=fraclen),size=3,alpha=0.8,shape=16)+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")+
+  scale_colour_gradient(high="blue",low="red")
+plot(t2)
+```
+
+    ## Warning: Removed 12 rows containing missing values (geom_point).
+
+![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+
+``` r
+pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.ORE.heatmap.pdf",width=7,height=2)
+plot(t2)
+```
+
+    ## Warning: Removed 12 rows containing missing values (geom_point).
+
+``` r
+dev.off()
+```
+
+    ## quartz_off_screen 
+    ##                 2
+
+**CanS**
+
+``` r
+h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.CanS.fa.ori.out.clean",header=F)
+names(h)<-c("crap","score","similarity","contig","start","end","strand","te","testart","teend","fraclen")
+#  52 3R-CM027568.1
+#  51 2L-CM027565.1
+#  44 3L-CM027567.1
+#  39 X-CM027564.1
+#  38 2R-CM027566.1
+#   3 4-CM027569.1
+
+keeporder<-c("CM027564.1","CM027565.1","CM027566.1", "CM027567.1","CM027568.1","CM027569.1")
+h<-subset(h,contig %in% keeporder)
+h$contig<-recode_factor(h$contig,CM027564.1="X",CM027565.1="2L",CM027566.1="2R", CM027567.1="3L",CM027568.1="3R",CM027569.1="4")
+
+h<-subset(h,similarity<25)
+h<-subset(h,fraclen>0.1)
+h<-rbind(h,boundary)
+
+t2<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,color=fraclen),size=2,alpha=0.8)+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")+
+  scale_colour_gradient(high="blue",low="red")
+plot(t2)
+```
+
+    ## Warning: Removed 12 rows containing missing values (geom_point).
+
+![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+
+``` r
+pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.CanS.heatmap.pdf",width=7,height=2)
 plot(t2)
 ```
 
@@ -393,7 +561,7 @@ plot(t)
 
     ## Warning: Removed 12 rows containing missing values (geom_point).
 
-![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
 ``` r
 #pdf(file="/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-originOfSpoink/graphs/species-histogram.pdf",width=7,height=7)
@@ -429,7 +597,7 @@ plot(t)
 
     ## Warning: Removed 12 rows containing missing values (geom_point).
 
-![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
 
 **RAL059**
 
@@ -458,7 +626,7 @@ plot(t)
 
     ## Warning: Removed 12 rows containing missing values (geom_point).
 
-![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
 
 **RAL737**
 
@@ -471,7 +639,7 @@ h<-subset(h,contig %in% keeporder)
 h$contig<-recode_factor(h$contig, CM034760.1="X",CM034761.1="2L",CM034762.1="2R", CM034763.1="3L",CM034764.1="3R",CM034765.1="4")
 
 h<-subset(h,similarity<25)
-h<-subset(h,fraclen>0.01)
+h<-subset(h,fraclen>0.1)
 h<-rbind(h,boundary)
 
 t<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")
@@ -480,7 +648,7 @@ plot(t)
 
     ## Warning: Removed 12 rows containing missing values (geom_point).
 
-![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
 
 ``` r
 pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.RAL737.pdf",width=7,height=2.5)
@@ -497,14 +665,14 @@ dev.off()
     ##                 2
 
 ``` r
-t2<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,color=fraclen),size=2,alpha=0.8)+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")+
+t2<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,color=fraclen),size=3,alpha=0.8,shape=16)+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")+
   scale_colour_gradient(low="red",high="blue")
 plot(t2)
 ```
 
     ## Warning: Removed 12 rows containing missing values (geom_point).
 
-![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->
+![](01-getting-LR-assemblies_files/figure-gfm/unnamed-chunk-24-2.png)<!-- -->
 
 ``` r
 pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.RAL737.heatmap.pdf",width=7,height=2)
