@@ -58,7 +58,7 @@ h[h$count==0,]$count<- -1
 #
 
 p<- ggplot(h,aes(y=count,x=reorder(name,year),fill=ap))+geom_bar(stat="identity")+ylab("count")+
-  scale_fill_manual(values=c("#016301","#FF0505"))+
+  scale_fill_manual(values=c("#016301","#D71E1E"))+
  theme(legend.position = "none", axis.title.x=element_blank(),axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1,size=8))
 plot(p)
 
