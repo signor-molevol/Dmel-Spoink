@@ -16,6 +16,7 @@ knitr::opts_chunk$set(echo = TRUE, python.reticulate = FALSE)
 # merge all clean files
 for i in *ori.out; do awk '{print $0,FILENAME}' $i |perl -pe 's/\.fa\.ori\.out//'
 for i in *ori.out.clean; do awk '{print $0,FILENAME}' $i |perl -pe 's/\.fa\.ori\.out\.clean//'; done > merged.clean.sum
+for i in *ori.out.clean; do awk '{print $0,FILENAME}' $i |perl -pe 's/\.fa\.ori\.out\.clean//'; done > merged.spoink.clean.sum
 python summarize-Spoink-insertions.py --sum merged.clean.sum > longread-summary.txt
 ```
 
@@ -24,6 +25,12 @@ python summarize-Spoink-insertions.py --sum merged.clean.sum > longread-summary.
 # similarity to Spoink between 25 and 5%
 # length fraction between 0.1 and 0.8
 cat merged.clean.sum |awk '$3<25 && $3>5 && $11<0.8 && $11>0.1' > degraded.shit.txt    
+```
+
+## prepare P-element
+
+```{bash eval=FALSE}
+for i in *ori.out.clean; do awk '{print $0,FILENAME}' $i |perl -pe 's/\.fa\.ori\.out\.clean//'; done > merged.pele.clean.sum
 ```
 
 

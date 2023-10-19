@@ -1,0 +1,46 @@
+---
+title: "Gonzalez analysis, visualize all (MCTE)"
+author: "roko"
+date: "9/8/2023"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, python.reticulate = FALSE)
+```
+
+
+## MCTE
+
+```{bash eval=FALSE}
+for i in raw-dmel/D.mel.*.fa; do RepeatMasker -pa 20 -no_is -s -nolow -dir rm/MCTE -lib seqs/MCTE.fasta $i;done 
+# merge
+ awk '{print $0,FILENAME}' *.ori.out|perl -pe 's/\.fa\.ori\.out//' >merged-Gonzalez.sum  
+# score
+python score-max.py --rm sum/merged-Gonzalez.sum > MCTE.score
+```
+
+# Visualize MCTE all TEs
+
+```{R}
+library(tidyverse)
+theme_set(theme_bw())
+sortorder<-c("D.mel.Iso1","D.mel.Pi2","D.mel.AKA017","D.mel.AKA018","D.mel.COR014","D.mel.COR018","D.mel.COR023","D.mel.COR025","D.mel.GIM012","D.mel.GIM024","D.mel.JUT008","D.mel.JUT011","D.mel.KIE094","D.mel.LUN004","D.mel.LUN007","D.mel.MUN008","D.mel.MUN009","D.mel.MUN013","D.mel.MUN015","D.mel.MUN016","D.mel.MUN020","D.mel.RAL059","D.mel.RAL091","D.mel.RAL176","D.mel.RAL177","D.mel.RAL375","D.mel.RAL426","D.mel.RAL737","D.mel.RAL855","D.mel.SLA001","D.mel.STO022","D.mel.TEN015","D.mel.TOM007","D.mel.TOM008")
+
+h<-read.table("/Users/rokofler/analysis/2023-Spoink/2023-09-Gonzalez/score/MCTE.score",header=F)
+names(h)<-c("te","species","score")
+h$spec <- factor(h$spec, levels=sortorder)
+
+for(tefam in unique(h$te)){
+  t<-subset(h,te %in% c(tefam))
+
+p<- ggplot(t,aes(y=score,x=spec))+geom_bar(stat="identity")+facet_grid(te~.)+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1,size=5))
+plot(p)
+}
+```
+
+
+
+
+

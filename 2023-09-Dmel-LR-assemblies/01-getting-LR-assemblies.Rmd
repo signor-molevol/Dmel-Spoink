@@ -168,6 +168,10 @@ reader-fasta.py ncbi_dataset/data/GCA_003402005.1/GCA_003402005.1_ASM340200v1_ge
 for i in assemblies/*.fa ; do RepeatMasker -pa 20 -no_is -s -nolow -dir rm -lib seq/spoink-dmel-consensus_v1.fasta  $i;done 
 # cleaning all repeat masked files
 for i in *.ori.out; do cat $i|reader-rm.py|rm-cleanup.py > $i.clean; done
+
+## now for the p-element as well
+for i in assemblies/*.fa; do RepeatMasker -pa 20 -no_is -s -nolow -dir rm-Pele -lib ../../Dmel-Spoink/sequences/pelement.fasta $i;done 
+for i in *.ori.out; do cat $i|reader-rm.py|rm-cleanup.py > $i.clean; done
 ```
 
 # Infer contig identities
@@ -183,6 +187,10 @@ nucmer -p nuco/D.mel.RAL059.nuco.delta refgenome/Dmel.ref.fa assemblies/D.mel.RA
 nucmer -p nuco/D.mel.CanS.nuco.delta refgenome/Dmel.ref.fa assemblies/D.mel.CanS.fa 
 nucmer -p nuco/D.mel.ORE.nuco refgenome/Dmel.ref.fa assemblies/D.mel.ORE.fa 
 nucmer -p nuco/D.mel.A7.nuco refgenome/Dmel.ref.fa assemblies/D.mel.A7.fa 
+nucmer -p nuco/D.mel.B1.nuco refgenome/Dmel.ref.fa assemblies/D.mel.B1.fa  
+nucmer -p nuco/D.mel.A4.nuco refgenome/Dmel.ref.fa assemblies/D.mel.A4.fa
+nucmer -p nuco/D.mel.JUT011.nuco refgenome/Dmel.ref.fa assemblies/D.mel.JUT011.fa 
+nucmer -p nuco/D.mel.SLA001.nuco refgenome/Dmel.ref.fa assemblies/D.mel.SLA001.fa 
 
 # coordinates
 show-coords D.mel.AKA017.nuco.delta > D.mel.AKA017.nuco.delta.coordinates
@@ -192,9 +200,49 @@ show-coords D.mel.RAL737.nuco.delta.delta > D.mel.RAL737.nuco.delta.coordinates
 show-coords D.mel.Iso1.nuco.delta > D.mel.Iso1.nuco.delta.coordinates
 show-coords D.mel.CanS.nuco.delta.delta > D.mel.CanS.nuco.delta.coordinates
 show-coords D.mel.ORE.nuco.delta > D.mel.ORE.nuco.delta.coordinates
+show-coords D.mel.A4.nuco.delta > D.mel.A4.nuco.delta.coordinates 
+show-coords D.mel.B1.nuco.delta > D.mel.B1.nuco.delta.coordinates
 ```
 
 ### which chromosomes?
+
+**JUT011**
+```{bash eval=FALSE}
+  55 3R-CM034876.1
+  54 3L-CM034875.1
+  44 X-CM034872.1
+  43 2R-CM034874.1
+  40 2L-CM034873.1
+   3 4-CM034877.1
+   1 [%-IDY]
+```
+
+
+**SLA001**
+```{bash eval=FALSE}
+  65 3R-CM034750.1
+  53 2R-CM034748.1
+  50 3L-CM034749.1
+  44 2L-CM034747.1
+  39 X-CM034746.1
+   2 4-CM034751.1
+   1 [%-IDY]
+```
+
+
+**A4**
+```{bash eval=FALSE}
+(base) [0,11334]fschwarz% cat D.mel.A4.nuco.delta.coordinates|awk '$7>100000'|awk '{print $12 "-" $13}'|sort |uniq -c |sort -nr $1|head -20    /Volumes/Temp1/Robert/2023-Spoink/06-mel-lr-assemblies/nuco
+  68 3R-CM010545.1
+  61 3L-CM010544.1
+  44 2R-CM010543.1
+  42 X-CM010541.1
+  41 2L-CM010542.1
+   1 [%-IDY]
+   1 4-CM010546.1
+```
+
+
 
 **A7**
 ```{bash eval=FALSE}
@@ -363,6 +411,36 @@ plot(t2)
 dev.off()
 ```
 
+**A4**
+```{R}
+h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.A4.fa.ori.out.clean",header=F)
+names(h)<-c("crap","score","similarity","contig","start","end","strand","te","testart","teend","fraclen")
+#   68 3R-CM010545.1
+#  61 3L-CM010544.1
+#  44 2R-CM010543.1
+#  42 X-CM010541.1
+#  41 2L-CM010542.1
+#   1 [%-IDY]
+#   1 4-CM010546.1
+
+keeporder<-c("CM010541.1","CM010542.1","CM010543.1", "CM010544.1","CM010545.1","CM010546.1")
+h<-subset(h,contig %in% keeporder)
+h$contig<-recode_factor(h$contig,CM010541.1="X",CM010542.1="2L",CM010543.1="2R", CM010544.1="3L",CM010545.1="3R",CM010546.1="4")
+
+h<-subset(h,similarity<25)
+h<-subset(h,fraclen>0.1)
+h<-rbind(h,boundary)
+
+t2<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,color=fraclen),size=2,alpha=0.8)+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")+
+  scale_colour_gradient(high="blue",low="red")
+plot(t2)
+pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.A4.heatmap.pdf",width=7,height=2)
+plot(t2)
+dev.off()
+```
+
+
+
 
 **A7**
 ```{R}
@@ -460,15 +538,80 @@ h<-subset(h,contig %in% keeporder)
 h$contig<-recode_factor(h$contig, CM034928.1="X",CM034929.1="2L",CM034930.1="2R", CM034931.1="3L",CM034932.1="3R",CM034933.1="4")
 
 h<-subset(h,similarity<25)
-h<-subset(h,fraclen>0.01)
+h<-subset(h,fraclen>0.1)
 h<-rbind(h,boundary)
 
-t<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,5000000,10000000,15000000,20000000,25000000),labels=c("0","5m","10m","15m","20m","25m"))+ylab("divergence [%]")
-plot(t)
-#pdf(file="/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-originOfSpoink/graphs/species-histogram.pdf",width=7,height=7)
-#plot(p)
-#dev.off()
+
+t2<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,color=fraclen),size=2,alpha=0.8)+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")+
+  scale_colour_gradient(high="blue",low="red")
+plot(t2)
+pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.AKA017.heatmap.pdf",width=7,height=2)
+plot(t2)
+dev.off()
 ```
+
+**JUT011**
+```{R}
+h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.JUT011.fa.ori.out.clean",header=F)
+names(h)<-c("crap","score","similarity","contig","start","end","strand","te","testart","teend","fraclen")
+
+#  55 3R-CM034876.1
+#  54 3L-CM034875.1
+#  44 X-CM034872.1
+#  43 2R-CM034874.1
+#  40 2L-CM034873.1
+#   3 4-CM034877.1
+
+
+keeporder<-c("CM034872.1","CM034873.1","CM034874.1", "CM034875.1","CM034876.1","CM034877.1")
+h<-subset(h,contig %in% keeporder)
+h$contig<-recode_factor(h$contig, CM034872.1="X",CM034873.1="2L",CM034874.1="2R", CM034875.1="3L",CM034876.1="3R",CM034877.1="4")
+
+h<-subset(h,similarity<25)
+h<-subset(h,fraclen>0.1)
+h<-rbind(h,boundary)
+
+
+t2<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,color=fraclen),size=2,alpha=0.8)+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")+
+  scale_colour_gradient(high="blue",low="red")
+plot(t2)
+pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.JUT011.heatmap.pdf",width=7,height=2)
+plot(t2)
+dev.off()
+```
+
+**SLA001**
+```{R}
+h<-read.table("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/rawori/D.mel.SLA001.fa.ori.out.clean",header=F)
+names(h)<-c("crap","score","similarity","contig","start","end","strand","te","testart","teend","fraclen")
+
+#   65 3R-CM034750.1
+#   53 2R-CM034748.1
+#   50 3L-CM034749.1
+#   44 2L-CM034747.1
+#   39 X-CM034746.1
+#   2 4-CM034751.1
+#   1 [%-IDY]
+
+
+
+keeporder<-c("CM034746.1","CM034747.1","CM034748.1", "CM034749.1","CM034750.1","CM034751.1")
+h<-subset(h,contig %in% keeporder)
+h$contig<-recode_factor(h$contig, CM034746.1="X",CM034747.1="2L",CM034748.1="2R", CM034749.1="3L",CM034750.1="3R",CM034751.1="4")
+
+h<-subset(h,similarity<25)
+h<-subset(h,fraclen>0.1)
+h<-rbind(h,boundary)
+
+
+t2<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,color=fraclen),size=2,alpha=0.8)+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")+
+  scale_colour_gradient(high="blue",low="red")
+plot(t2)
+pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.SLA001.heatmap.pdf",width=7,height=2)
+plot(t2)
+dev.off()
+```
+
 
 **RAL176**
 ```{R}
@@ -488,11 +631,15 @@ h<-subset(h,contig %in% keeporder)
 h$contig<-recode_factor(h$contig, CM034788.1="X",CM034789.1="2L",CM034790.1="2R", CM034791.1="3L",CM034792.1="3R",CM034793.1="4")
 
 h<-subset(h,similarity<25)
-h<-subset(h,fraclen>0.01)
+h<-subset(h,fraclen>0.1)
 h<-rbind(h,boundary)
 
-t<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,5000000,10000000,15000000,20000000,25000000),labels=c("0","5m","10m","15m","20m","25m"))+ylab("divergence [%]")
-plot(t)
+t2<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,color=fraclen),size=2,alpha=0.8)+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")+
+  scale_colour_gradient(high="blue",low="red")
+plot(t2)
+pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.RAL176.heatmap.pdf",width=7,height=2)
+plot(t2)
+dev.off()
 ```
 
 
@@ -513,11 +660,15 @@ h<-subset(h,contig %in% keeporder)
 h$contig<-recode_factor(h$contig, CM034802.1="X",CM034803.1="2L",CM034804.1="2R", CM034805.1="3L",CM034806.1="3R",CM034807.1="4")
 
 h<-subset(h,similarity<25)
-h<-subset(h,fraclen>0.01)
+h<-subset(h,fraclen>0.1)
 h<-rbind(h,boundary)
 
-t<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,size=fraclen))+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,5000000,10000000,15000000,20000000,25000000),labels=c("0","5m","10m","15m","20m","25m"))+ylab("divergence [%]")
-plot(t)
+t2<-ggplot()+geom_point(data=h,aes(x=start,y=similarity,color=fraclen),size=2,alpha=0.8)+facet_grid(.~contig, scales="free_x", space = "free_x")+ylim(0,25)+scale_x_continuous(breaks=c(0,10000000,20000000),labels=c("0","10m","20m"))+ylab("divergence [%]")+
+  scale_colour_gradient(high="blue",low="red")
+plot(t2)
+pdf("/Users/rokofler/analysis/2023-Spoink/Dmel-Spoink/2023-09-Dmel-LR-assemblies/graphs/D.mel.RAL059.heatmap.pdf",width=7,height=2)
+plot(t2)
+dev.off()
 ```
 
 
